@@ -1,0 +1,3 @@
+{% macro href(doc) %}
+{{ doc.doc.filepath }}{% if doc.doc.line_no %}#L{{ doc.doc.line_no }}{% endif %}
+{%- endmacro %}

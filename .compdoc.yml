@@ -1,0 +1,13 @@
+modules:
+  compdoc.compiler: compdoc/compiler.py
+  compdoc.exceptions: compdoc/exceptions.py
+  compdoc.model: compdoc/model.py
+  compdoc.parser: compdoc/parser.py
+  compdoc_cli.formatters: compdoc_cli/formatters.py
+  compdoc_cli.compdoc_cli: compdoc_cli/compdoc_cli.py
+  tests.test_compiler: tests/test_compiler.py
+  tests.test_parser: tests/test_parser.py
+
+formatters:
+  ul: compdoc-formatters/ul.md.j2
+  href: compdoc-formatters/href.md.j2

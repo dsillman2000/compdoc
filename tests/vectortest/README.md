@@ -6,11 +6,12 @@ Test module description!
 
 # Classes
 
-- **`Vec2`**: 2-dimensional vector struct, represented as a named tuple.
+
+- [**`Vec2`**](tests/vectortest/vec.py#L7): 2-dimensional vector struct, represented as a named tuple.
   - _Base(s)_: NamedTuple
-- **Attributes**:
-  - `x (float)`: the x component of the vector
-  - `y (float)`: the y component of the vector
+  - **Attributes**:
+    - `x (float)`: the x component of the vector
+    - `y (float)`: the y component of the vector
 
 Comes with a helpful function for vector magnitude:
 
@@ -22,18 +23,20 @@ Comes with a helpful function for vector magnitude:
 
 Other classes for higher-dimensional vectors:
 
-- **`Vec3`**: 3-dimensional vector struct, represented as a named tuple.
-  - _Base(s)_: NamedTuple
-- **Attributes**:
-  - `x (float)`: the x component of the vector
-  - `y (float)`: the y component of the vector
-  - `z (float)`: the z component of the vector
 
-- **`VecN`**: N-dimensional vector struct, represented as a named tuple.
+- [**`Vec3`**](tests/vectortest/vec.py#L26): 3-dimensional vector struct, represented as a named tuple.
   - _Base(s)_: NamedTuple
-- **Attributes**:
-  - `n (int)`: The number of dimensions of the vector
-  - `components (tuple[float, ...])`: the components of the vector, as a tuple
+  - **Attributes**:
+    - `x (float)`: the x component of the vector
+    - `y (float)`: the y component of the vector
+    - `z (float)`: the z component of the vector
+
+
+- [**`VecN`**](tests/vectortest/vec.py#L47): N-dimensional vector struct, represented as a named tuple.
+  - _Base(s)_: NamedTuple
+  - **Attributes**:
+    - `n (int)`: The number of dimensions of the vector
+    - `components (tuple[float, ...])`: the components of the vector, as a tuple
 
 The n-dimensional implementation comes with classmethod constructors for using iterables of floats 
 to pack a VecN:

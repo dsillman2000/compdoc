@@ -1,35 +1,38 @@
-{% macro format_class(cls) -%}
-- **`{{ cls.doc.class_name }}`**: {{ cls.doc.docstring.short_description }} 
+{% macro format_class(cls, indent=0, link=true) -%}
+{%- set indent = indent * ' ' -%}
+{%- set classname %}{% if link %}[**`{{ cls.doc.class_name }}`**]({{ cls.doc.filepath }}#L{{ cls.doc.line_no }}){% else %}**`{{ cls.doc.class_name }}`**{% endif %}{% endset %}
+{{ indent }}- {{ classname }}: {{ cls.doc.docstring.short_description + (cls.doc.docstring.long_description if cls.doc.docstring.long_description else '') }} 
 {%- if cls.doc.bases %}
-  - _Base(s)_: {{ cls.doc.bases | join(',') }}
+{{ indent }}  - _Base(s)_: {{ cls.doc.bases | join(',') }}
 {%- endif %}
 {%- if cls.doc.docstring.params %}
-- **Attributes**:
+{{ indent }}  - **Attributes**:
 {%- for attr in cls.doc.docstring.params %}
-  - `{{ attr.arg_name }} ({{ attr.type_name }})`: {{ attr.description }}
+{{ indent }}    - `{{ attr.arg_name }} ({{ attr.type_name }})`: {{ attr.description }}
 {%- endfor %}
 {%- endif %}
 {%- endmacro %}
 
-{% macro format_function(func) -%}
+{% macro format_function(func, indent=0, link=true) -%}
+{%- set indent = indent * ' ' -%}
 {% set args -%}
 {%- if func.doc.annotations.first_arg -%}{{ func.doc.annotations.first_arg }}{% if func.doc.annotations.args %}, {% endif %}{% endif -%}
 {%- for arg, type in func.doc.annotations.args %}{{ arg }}: {{ type }}{% if not loop.last %}, {% endif %}{% endfor -%}
 {%- endset %}
-- `{{ func.doc.func_name }} : ({{ args }}) -> {{ func.doc.annotations.returns }}`
-  - {{ func.doc.docstring.short_description | replace('\n', '\n  ') }}
+{{ indent }}- `{{ func.doc.func_name }} : ({{ args }}) -> {{ func.doc.annotations.returns }}`
+{{ indent }}  - {{ func.doc.docstring.short_description | replace('\n', '\n  ') }}
 {%- if func.doc.docstring.params %}
-  - **Args**:
+{{ indent }}  - **Args**:
 {%- for param in func.doc.docstring.params %}
-    - `{{ param.arg_name }} ({{ param.type_name }})` : {{ param.description }}
+{{ indent }}    - `{{ param.arg_name }} ({{ param.type_name }})` : {{ param.description }}
 {%- endfor %}
 {%- if func.doc.docstring.yields %}
-  - **Yields**:
-    - `{{ func.doc.docstring.yields.type_name }}`: {{ func.doc.docstring.yields.description }}
+{{ indent }}  - **Yields**:
+{{ indent }}    - `{{ func.doc.docstring.yields.type_name }}`: {{ func.doc.docstring.yields.description }}
 {%- endif %}
 {%- endif %}
 {%- if func.doc.docstring.returns %}
-  - **Returns**:
-    - `{{ func.doc.docstring.returns.type_name }}`: {{ func.doc.docstring.returns.description }}
+{{ indent }}  - **Returns**:
+{{ indent }}    - `{{ func.doc.docstring.returns.type_name }}`: {{ func.doc.docstring.returns.description }}
 {%- endif %}
 {%- endmacro %}

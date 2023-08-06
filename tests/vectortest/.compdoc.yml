@@ -1,6 +1,6 @@
 modules:
   vec: vec.py
-  __init__: __init__.py
 
 formatters:
   ul: compdoc-formatters/ul.md.j2
+  href: compdoc-formatters/href.md.j2

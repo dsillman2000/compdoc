@@ -15,9 +15,9 @@ from compdoc.model import ClassDoc, FuncAnnotations, FuncDoc, ModuleDoc
 
 
 def index_modules(project_filepath: str) -> dict[str, str]:
-    python_files = glob.glob('*.py', root_dir=project_filepath)
+    python_files = glob.glob('*.py', root_dir=project_filepath) + glob.glob('**/*.py', root_dir=project_filepath)
     python_files = [ p.removeprefix('./') for p in python_files ]
-    module_shortnames = [ os.path.basename(p).removesuffix('.py') for p in python_files ]
+    module_shortnames = [ p.replace('/', '.').removesuffix('.py') for p in python_files ]
     return dict(zip(module_shortnames, python_files))
 
 
@@ -125,6 +125,8 @@ def parse_function_annotations(function_def: ast.FunctionDef) -> FuncAnnotations
             return annotation.value.id + '[' + _parse_arg_annotation(annotation.slice) + ']'
         if isinstance(annotation, ast.Constant):
             return annotation.value
+        if isinstance(annotation, ast.Tuple):
+            return ', '.join(map(_parse_arg_annotation, annotation.elts))
         raise ParseArgAnnotationException('Failed to parse arg annotation: %s' % annotation)
 
     return_type = _parse_arg_annotation(function_def.returns)

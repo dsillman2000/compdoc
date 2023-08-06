@@ -1,10 +1,10 @@
 # CompDoc
 
+{% set model = compdoc.module('compdoc.model') %}
+{% set compiler = compdoc.module('compdoc.compiler')%}
 
-
-
-
-
+{% set ul = compdoc.formatter('ul') %}
+{% set href = compdoc.formatter('href') %}
 
 CompDoc is a Python CLI tool for Jinja-formatting docstrings from your library into other documentation formats.
 
@@ -13,7 +13,7 @@ CompDoc is a Python CLI tool for Jinja-formatting docstrings from your library i
 My impetus for putting this tool together was running into these issues maintaining documentation, even for relatively simple Python libraries:
 
 > 
-> 1. "I have to copy any changes I make to my docstrings to my other documentation sources, like my README. It almost makes me not want to bother changing the API of my existing code.
+> 1. "I have to copy any changes I make to my docstrings to my other documentation sources, like my README. It almost makes me not want to bother changing the API of my existing code."
 > 
 > 2. "When my code is edited or moves around, line number links need to be rewritten to point to the correct lines in the source code."
 > 
@@ -50,36 +50,11 @@ CompDoc knows how to index three different types of Python library constructs:
 
 When parsing the project, CompDoc uses Python's native `ast` library to parse metadata about each of the Python constructs you've implemented.
 
+{{ ul.format_class(model.ModuleDoc) }}
 
-- [**`ModuleDoc`**](compdoc/model.py#L70): Struct for storing documentation details of the composite functions and classes of a Python module.
-  - _Base(s)_: NamedTuple
-  - **Attributes**:
-    - `module_name (str)`: Name of the module, as in `__module__`.
-    - `filepath (str)`: Path to the source file, relative to the project root.
-    - `docs (list[ClassDoc | FuncDoc])`: Implemented classes and functions in the module.
+{{ ul.format_class(model.ClassDoc) }}
 
-
-- [**`ClassDoc`**](compdoc/model.py#L37): Struct for storing documentation details of the functions which compose a class, including a docstring for the class itself.
-  - _Base(s)_: NamedTuple
-  - **Attributes**:
-    - `class_name (str)`: Name of the class, as in `__class__`.
-    - `filepath (str)`: Path to the source file, relative to the project root.
-    - `line_no (int)`: Line number of the class implementation.
-    - `string (str)`: Plaintext docstring at the top of the class implementation.
-    - `docstring (Docstring)`: Parsed docstring contents, as a `docstring_parser.Docstring`.
-    - `bases (list[str])`: List of base classes of this class implementation.
-    - `elements (list[FuncDoc])`: List of implemented methods of this class.
-
-
-- [**`FuncDoc`**](compdoc/model.py#L19): Struct for storing documentation details about functions, including their signature & docstring.
-  - _Base(s)_: NamedTuple
-  - **Attributes**:
-    - `func_name (str)`: Name of the function.
-    - `filepath (str)`: Path to the source file, relative to the project root.
-    - `line_no (int)`: Line number of the function implementation.
-    - `annotations (FuncAnnotations)`: Object containing metadata of the function signature.
-    - `string (str)`: Plaintext docstring at the top of the function implementation.
-    - `docstring (Docstring)`: Parsed docstring contents, as a `docstring_parser.Docstring`.
+{{ ul.format_class(model.FuncDoc) }}
 
 The containment relationships between these constructs are summarized symbolically:
 
@@ -92,11 +67,10 @@ ModuleDoc* {
 }
 ```
 
-In order to load documentation details into your Jinja context, you use the [`compdoc.module`](
-compdoc/compiler.py#L130) function:
+In order to load documentation details into your Jinja context, you use the [`compdoc.module`]({{ href.href(compiler.CompDoc.module) }}) function:
 
 ```j2
-{% set mymodule = compdoc.module('mymodule') %}
+{{ "{%" }} set mymodule = compdoc.module('mymodule') {{ "%}" }}
 ```
 
 Which will have attributes for the constituent classes and functions. For example, we can use it to format verbatim 
@@ -104,7 +78,7 @@ docstrings from our source code:
 
 ```j2
 The `mymodule` module implements `MyClass`:
-- {{ mymodule.MyClass.doc.string }}
+- {{ "{{" }} mymodule.MyClass.doc.string {{ "}}" }}
 ```
 
 > Note that accessing the attributes enumerated in the above docs for `ClassDoc` and `FuncDoc` must be done through the 
@@ -115,10 +89,10 @@ Likewise, we can access the verbatim docstrings from function definitions as wel
 
 ```j2
 Docstring for `MyClass.my_function` method:
-- {{ mymodule.MyClass.my_function.doc.string }}
+- {{ "{{" }} mymodule.MyClass.my_function.doc.string {{ "}}" }}
 
 Docstring for `mymodule.my_standalone_function` method:
-- {{ mymodule.my_standalone_function.doc.string }}
+- {{ "{{" }} mymodule.my_standalone_function.doc.string {{ "}}" }}
 ```
 
 ### Formatters

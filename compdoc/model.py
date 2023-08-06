@@ -36,7 +36,7 @@ class FuncDoc(NamedTuple):
 
 class ClassDoc(NamedTuple):
     """Struct for storing documentation details of the functions which compose a class, including a docstring for the 
-    class itself.
+        class itself.
 
     Attributes:
         class_name (str): Name of the class, as in `__class__`.

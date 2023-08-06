@@ -39,7 +39,9 @@ def cli():
         with open(os.path.join(arguments.init_path, '.compdoc.yml'), 'w') as f:
             f.write('modules:')
             for mod, path in compdoc.parser.index_modules(arguments.init_path).items():
-                print(mod, path)
+                if mod.endswith('__init__'):
+                    continue
+                print(mod, '\t', path)
                 f.write(f'\n  {mod}: {path}')
             formatter_folder = os.path.join(arguments.init_path, 'compdoc-formatters')
             f.write('\n\nformatters:')
