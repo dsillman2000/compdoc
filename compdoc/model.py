@@ -5,6 +5,12 @@ from docstring_parser import Docstring
 
 class FuncAnnotations(NamedTuple):
     """Struct for storing string representations of the components of a function's signature.
+
+    Attributes:
+        first_arg ('self' | 'cls' | None): Leading argument of the function, for distinguishing instance/class/external
+            methods.
+        args (list[tuple[str, str]]): Pairs of arg_name, arg_type for the function signature's arguments.
+        returns (str): Return type of the function, as a string.
     """    
     first_arg: Optional[Literal['self', 'cls']]
     args: list[tuple[str, str]]
@@ -12,6 +18,14 @@ class FuncAnnotations(NamedTuple):
 
 class FuncDoc(NamedTuple):
     """Struct for storing documentation details about functions, including their signature & docstring.
+
+    Attributes:
+        func_name (str): Name of the function.
+        filepath (str): Path to the source file, relative to the project root.
+        line_no (int): Line number of the function implementation.
+        annotations (FuncAnnotations): Object containing metadata of the function signature.
+        string (str): Plaintext docstring at the top of the function implementation.
+        docstring (Docstring): Parsed docstring contents, as a `docstring_parser.Docstring`.
     """    
     func_name: str
     filepath: str
@@ -23,6 +37,15 @@ class FuncDoc(NamedTuple):
 class ClassDoc(NamedTuple):
     """Struct for storing documentation details of the functions which compose a class, including a docstring for the 
     class itself.
+
+    Attributes:
+        class_name (str): Name of the class, as in `__class__`.
+        filepath (str): Path to the source file, relative to the project root.
+        line_no (int): Line number of the class implementation.
+        string (str): Plaintext docstring at the top of the class implementation.
+        docstring (Docstring): Parsed docstring contents, as a `docstring_parser.Docstring`.
+        bases (list[str]): List of base classes of this class implementation.
+        elements (list[FuncDoc]): List of implemented methods of this class.
     """    
     class_name: str
     filepath: str
@@ -46,6 +69,11 @@ DocType = Union[ClassDoc, FuncDoc]
 
 class ModuleDoc(NamedTuple):
     """Struct for storing documentation details of the composite functions and classes of a Python module.
+
+    Attributes:
+        module_name (str): Name of the module, as in `__module__`.
+        filepath (str): Path to the source file, relative to the project root.
+        docs (list[ClassDoc | FuncDoc]): Implemented classes and functions in the module.
     """    
     module_name: str
     filepath: str

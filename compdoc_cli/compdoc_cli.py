@@ -2,6 +2,7 @@ import argparse
 import os
 
 import yaml
+from compdoc_cli import formatters
 
 import compdoc.compiler
 import compdoc.parser
@@ -15,6 +16,8 @@ def cli():
     init_parser = cmd_parser.add_parser('init', help='Initialize CompDoc on a Python project. Should be called from the'
                                         ' root folder of the project.')
     init_parser.add_argument('init_path', type=str, help='Location to initialize CompDoc', default=os.getcwd())
+    init_parser.add_argument('-f --formatters', type=str, help='Pattern to select default formatters by name', 
+                             default='*', dest='formatters')
 
     compile_parser = cmd_parser.add_parser('compile', help='Compile a markdown-Jinja file, including its CompDoc '
                                            'directives.')
@@ -37,13 +40,20 @@ def cli():
             f.write('modules:')
             for mod, path in compdoc.parser.index_modules(arguments.init_path).items():
                 print(mod, path)
-                f.write(f'\n - {mod}: {path}')
+                f.write(f'\n  {mod}: {path}')
+            formatter_folder = os.path.join(arguments.init_path, 'compdoc-formatters')
+            f.write('\n\nformatters:')
+            for formatter, path in formatters.load_formatters(formatter_folder, arguments.formatters).items():
+                print(formatter, path)
+                f.write(f'\n  {formatter}: {path.removeprefix(arguments.init_path + "/")}')
             print('CompDoc initialized in ' + os.path.join(arguments.init_path, '.compdoc.yml'))
 
     elif arguments.compile_path:
+        
+        project_folder = os.path.dirname(arguments.compile_path)
 
         if arguments.config_path is None:
-            config_path = os.path.join(os.path.dirname(arguments.compile_path), '.compdoc.yml')
+            config_path = os.path.join(project_folder, '.compdoc.yml')
         else:
             config_path = arguments.config_path
 
@@ -53,9 +63,15 @@ def cli():
             exit(1)
 
         with open(config_path, 'r') as cf:
-            print('config path = %s' % config_path)
             config_dict = yaml.load(cf, yaml.BaseLoader)
-            print(config_dict)
+
+        """CWD correction"""
+        config_dict['modules'] = { 
+            mod: os.path.join(project_folder, path) for mod, path in config_dict['modules'].items() 
+        }
+        config_dict['formatters'] = {
+            formatter: os.path.join(project_folder, path) for formatter, path in config_dict['formatters'].items()
+        }
 
         if not os.path.exists(arguments.compile_path):
             print("ERROR: Couldn't find CompDoc markdown file to compile: %s" % arguments.compile_path)

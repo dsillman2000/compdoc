@@ -3,7 +3,7 @@ name = "compdoc"
 version = "0.1.0"
 description = ""
 authors = ["David Sillman <dsillman2000@gmail.com>"]
-include = ["compdoc_cli.py"]
+include = ["compdoc_cli/default_formatters"]
 packages = [{ include = "compdoc" }, { include = "compdoc_cli" }]
 readme = "README.md"
 

@@ -1,5 +1,6 @@
 modules:
-  vec: tests/vectortest/vec.py
+  vec: vec.py
+  __init__: __init__.py
 
 formatters:
-  ul: tests/vectortest/formatters/ul.md.j2
+  ul: compdoc-formatters/ul.md.j2
