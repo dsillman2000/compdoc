@@ -20,7 +20,7 @@ def test_parse_module():
     assert vec2doc.filepath == 'tests/vectortest/vec.py'
     assert vec2doc.line_no == 7
     assert vec2doc.bases == ['NamedTuple']
-    assert vec2doc.doc == '2-dimensional vector struct, represented as a named tuple.'
+    assert vec2doc.string == '2-dimensional vector struct, represented as a named tuple.'
     assert len(vec2doc.elements) == 1
 
     vec2normdoc = vec2doc.elements[0]
@@ -29,7 +29,7 @@ def test_parse_module():
     assert vec2normdoc.filepath == 'tests/vectortest/vec.py'
     assert vec2normdoc.line_no == 13
     assert vec2normdoc.annotations._asdict() == {'first_arg': 'self', 'args': [], 'returns': 'float'}
-    assert vec2normdoc.doc == 'Computes the L2 norm of the vector.\n\nReturns:\n    float: Norm of this vector'
+    assert vec2normdoc.string == 'Computes the L2 norm of the vector.\n\nReturns:\n    float: Norm of this vector'
 
     vec3doc = rval.docs[1]
     assert isinstance(vec3doc, ClassDoc)
@@ -37,7 +37,7 @@ def test_parse_module():
     assert vec3doc.filepath == 'tests/vectortest/vec.py'
     assert vec3doc.line_no == 22
     assert vec3doc.bases == ['NamedTuple']
-    assert vec3doc.doc == '3-dimensional vector struct, represented as a named tuple.'
+    assert vec3doc.string == '3-dimensional vector struct, represented as a named tuple.'
     assert len(vec3doc.elements) == 1
 
     vec3normdoc = vec3doc.elements[0]
@@ -46,7 +46,7 @@ def test_parse_module():
     assert vec3normdoc.filepath == 'tests/vectortest/vec.py'
     assert vec3normdoc.line_no == 29
     assert vec3normdoc.annotations._asdict() == {'first_arg': 'self', 'args': [], 'returns': 'float'}
-    assert vec3normdoc.doc == 'Computes the L2 norm of the vector.\n\nReturns:\n    float: Norm of this vector'
+    assert vec3normdoc.string == 'Computes the L2 norm of the vector.\n\nReturns:\n    float: Norm of this vector'
 
     vecndoc = rval.docs[2]
     assert isinstance(vecndoc, ClassDoc)
@@ -54,7 +54,7 @@ def test_parse_module():
     assert vecndoc.filepath == 'tests/vectortest/vec.py'
     assert vecndoc.line_no == 38
     assert vecndoc.bases == ['NamedTuple']
-    assert vecndoc.doc == 'N-dimensional vector struct, represented as a named tuple.'
+    assert vecndoc.string == 'N-dimensional vector struct, represented as a named tuple.'
     assert len(vecndoc.elements) == 3
 
     vecnfromcomponentsdoc = vecndoc.elements[0] 
@@ -65,7 +65,7 @@ def test_parse_module():
     assert vecnfromcomponentsdoc.annotations._asdict() == {
         'first_arg': 'cls', 'args': [('*components', 'float')], 'returns': 'VecN'
     }
-    assert vecnfromcomponentsdoc.doc == ('Constructs a VecN from however many floating point components are provided.\n'
+    assert vecnfromcomponentsdoc.string == ('Constructs a VecN from however many floating point components are provided.\n'
                                         '\nReturns:\n    VecN: A new n-dimensional vector with the specified components')
     
     vecnfromlistdoc = vecndoc.elements[1]

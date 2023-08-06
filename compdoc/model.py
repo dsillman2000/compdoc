@@ -17,7 +17,7 @@ class FuncDoc(NamedTuple):
     filepath: str
     line_no: int
     annotations: FuncAnnotations
-    doc: Optional[str]
+    string: Optional[str]
     docstring: Optional[Docstring]
 
 class ClassDoc(NamedTuple):
@@ -27,7 +27,7 @@ class ClassDoc(NamedTuple):
     class_name: str
     filepath: str
     line_no: int
-    doc: Optional[str]
+    string: Optional[str]
     docstring: Optional[Docstring]
     bases: list[str]
     elements: list[FuncDoc]

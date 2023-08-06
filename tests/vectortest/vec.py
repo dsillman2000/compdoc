@@ -6,6 +6,10 @@ from typing import Generic, NamedTuple, SupportsInt, TypeVar
 
 class Vec2(NamedTuple):
     """2-dimensional vector struct, represented as a named tuple.
+
+    Attributes:
+        x (float): the x component of the vector
+        y (float): the y component of the vector
     """
     x: float
     y: float
@@ -21,6 +25,11 @@ class Vec2(NamedTuple):
 
 class Vec3(NamedTuple):
     """3-dimensional vector struct, represented as a named tuple.
+
+    Attributes:
+        x (float): the x component of the vector
+        y (float): the y component of the vector
+        z (float): the z component of the vector
     """    
     x: float
     y: float
@@ -37,6 +46,10 @@ class Vec3(NamedTuple):
 
 class VecN(NamedTuple):
     """N-dimensional vector struct, represented as a named tuple.
+
+    Attributes:
+        n (int): The number of dimensions of the vector
+        components (tuple[float, ...]): the components of the vector, as a tuple
     """    
     n: int
     components: tuple[float, ...]
@@ -52,7 +65,7 @@ class VecN(NamedTuple):
     
     @classmethod
     def from_list(cls, xs: list[float]) -> "VecN":
-        """Constructs a VecN from a list of floats.
+        """Constructs a `VecN` from a list of floats.
 
         Args:
             xs (list[float]): Components of the n-dimensional vector

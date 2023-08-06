@@ -1,7 +1,13 @@
 {% macro format_class(cls) -%}
-- **`{{ cls.doc.class_name }}`**: {{ cls.doc.doc }} 
+- **`{{ cls.doc.class_name }}`**: {{ cls.doc.docstring.short_description }} 
 {%- if cls.doc.bases %}
   - _Base(s)_: {{ cls.doc.bases | join(',') }}
+{%- endif %}
+{%- if cls.doc.docstring.params %}
+- **Attributes**:
+{%- for attr in cls.doc.docstring.params %}
+  - `{{ attr.arg_name }} ({{ attr.type_name }})`: {{ attr.description }}
+{%- endfor %}
 {%- endif %}
 {%- endmacro %}
 
@@ -17,6 +23,10 @@
 {%- for param in func.doc.docstring.params %}
     - `{{ param.arg_name }} ({{ param.type_name }})` : {{ param.description }}
 {%- endfor %}
+{%- if func.doc.docstring.yields %}
+  - **Yields**:
+    - `{{ func.doc.docstring.yields.type_name }}`: {{ func.doc.docstring.yields.description }}
+{%- endif %}
 {%- endif %}
 {%- if func.doc.docstring.returns %}
   - **Returns**:

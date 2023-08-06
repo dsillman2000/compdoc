@@ -76,7 +76,7 @@ def parse_class_def(class_def: ast.ClassDef, filepath: str) -> ClassDoc:
                 body_offset: int = class_def.col_offset + 4
                 docstring = class_def.body[0].value.s.replace('\n' + ' ' * body_offset, '\n').strip()
                 class_doc = class_doc._replace(
-                    doc=docstring,
+                    string=docstring,
                     docstring=docstring_parser.parse(docstring),
                 )
 
@@ -106,7 +106,7 @@ def parse_function_def(function_def: ast.FunctionDef, filepath: str) -> FuncDoc:
                 body_offset: int = function_def.col_offset + 4
                 docstring = function_def.body[0].value.s.replace('\n' + ' ' * body_offset, '\n').strip()
                 func_doc = func_doc._replace(
-                    doc=docstring,
+                    string=docstring,
                     docstring=docstring_parser.parse(docstring),
                 )
 

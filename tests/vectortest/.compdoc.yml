@@ -2,4 +2,4 @@ modules:
   vec: tests/vectortest/vec.py
 
 formatters:
-  david: tests/vectortest/formatters/david.md.j2
+  ul: tests/vectortest/formatters/ul.md.j2

@@ -6,7 +6,8 @@ import yaml
 import compdoc.compiler
 import compdoc.parser
 
-if __name__ == "__main__":
+
+def cli():
 
     arg_parser = argparse.ArgumentParser(description="CompDoc CLI")
     cmd_parser = arg_parser.add_subparsers()

@@ -8,6 +8,9 @@ Test module description!
 
 - **`Vec2`**: 2-dimensional vector struct, represented as a named tuple.
   - _Base(s)_: NamedTuple
+- **Attributes**:
+  - `x (float)`: the x component of the vector
+  - `y (float)`: the y component of the vector
 
 Comes with a helpful function for vector magnitude:
 
@@ -17,17 +20,27 @@ Comes with a helpful function for vector magnitude:
   - **Returns**:
     - `float`: Norm of this vector
 
+Other classes for higher-dimensional vectors:
+
 - **`Vec3`**: 3-dimensional vector struct, represented as a named tuple.
   - _Base(s)_: NamedTuple
+- **Attributes**:
+  - `x (float)`: the x component of the vector
+  - `y (float)`: the y component of the vector
+  - `z (float)`: the z component of the vector
 
 - **`VecN`**: N-dimensional vector struct, represented as a named tuple.
   - _Base(s)_: NamedTuple
+- **Attributes**:
+  - `n (int)`: The number of dimensions of the vector
+  - `components (tuple[float, ...])`: the components of the vector, as a tuple
 
-Comes with classmethod constructors for using iterables of floats to pack a VecN:
+The n-dimensional implementation comes with classmethod constructors for using iterables of floats 
+to pack a VecN:
 
 
 - `from_list : (cls, xs: list[float]) -> VecN`
-  - Constructs a VecN from a list of floats.
+  - Constructs a `VecN` from a list of floats.
   - **Args**:
     - `xs (list[float])` : Components of the n-dimensional vector
   - **Returns**:

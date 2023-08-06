@@ -1,7 +1,7 @@
 # VectorTest
 
 {% set vec = compdoc.module('vec') -%}
-{% set df = compdoc.formatter('david') -%}
+{% set ul = compdoc.formatter('ul') -%}
 
 ---
 
@@ -9,30 +9,33 @@ Test module description!
 
 # Classes
 
-{{ df.format_class(vec.Vec2) }}
+{{ ul.format_class(vec.Vec2) }}
 
 Comes with a helpful function for vector magnitude:
 
-{{ df.format_function(vec.Vec2.norm) }}
+{{ ul.format_function(vec.Vec2.norm) }}
 
-{{ df.format_class(vec.Vec3) }}
+Other classes for higher-dimensional vectors:
 
-{{ df.format_class(vec.VecN) }}
+{{ ul.format_class(vec.Vec3) }}
 
-Comes with classmethod constructors for using iterables of floats to pack a VecN:
+{{ ul.format_class(vec.VecN) }}
 
-{{ df.format_function(vec.VecN.from_list) }}
+The n-dimensional implementation comes with classmethod constructors for using iterables of floats 
+to pack a VecN:
+
+{{ ul.format_function(vec.VecN.from_list) }}
 
 <br />
 
-{{ df.format_function(vec.VecN.from_components) }}
+{{ ul.format_function(vec.VecN.from_components) }}
 
 # Standalone functions
 
 We supply just one function which flattens a list of arbitrary N-dimensional vectors into a single,
 concatenated, N-dimensional vector.
 
-{{ df.format_function(vec.flatten_vecs) }}
+{{ ul.format_function(vec.flatten_vecs) }}
 
 # Acknowledgements
 
