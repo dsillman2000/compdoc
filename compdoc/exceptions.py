@@ -12,3 +12,21 @@ class ParseArgAnnotationException(Exception):
 
 class FormatUnsupportedDocException(Exception):
     pass
+
+class FormatterMissingException(Exception):
+    pass
+
+class CompileUnrecognizedModuleException(Exception):
+    pass
+
+class CompileUnrecognizedModuleAttrException(Exception):
+    pass
+
+class CompileUnrecognizedFormatterException(Exception):
+    pass
+
+class CompileClassFuncNotFoundException(Exception):
+    pass
+
+class CompileException(Exception):
+    pass

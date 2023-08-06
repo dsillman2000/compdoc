@@ -1,6 +1,9 @@
 import ast
+import glob
 import os
-from typing import Optional, cast
+from typing import Optional
+
+import docstring_parser
 
 from compdoc.exceptions import (
     AstParseException,
@@ -9,6 +12,13 @@ from compdoc.exceptions import (
     ParseClassBaseException,
 )
 from compdoc.model import ClassDoc, FuncAnnotations, FuncDoc, ModuleDoc
+
+
+def index_modules(project_filepath: str) -> dict[str, str]:
+    python_files = glob.glob('*.py', root_dir=project_filepath)
+    python_files = [ p.removeprefix('./') for p in python_files ]
+    module_shortnames = [ os.path.basename(p).removesuffix('.py') for p in python_files ]
+    return dict(zip(module_shortnames, python_files))
 
 
 def parse_module(source_filepath: str) -> ModuleDoc:
@@ -54,7 +64,8 @@ def parse_class_def(class_def: ast.ClassDef, filepath: str) -> ClassDoc:
         class_def.name, 
         filepath, 
         class_def.lineno, 
-        '', 
+        None, 
+        None,
         class_bases, 
         [],
     )
@@ -63,8 +74,10 @@ def parse_class_def(class_def: ast.ClassDef, filepath: str) -> ClassDoc:
         if isinstance(class_def.body[0].value, ast.Constant):
             if class_def.body[0].value.s  is not None:
                 body_offset: int = class_def.col_offset + 4
+                docstring = class_def.body[0].value.s.replace('\n' + ' ' * body_offset, '\n').strip()
                 class_doc = class_doc._replace(
-                    doc=class_def.body[0].value.s.replace('\n' + ' ' * body_offset, '\n').strip()
+                    doc=docstring,
+                    docstring=docstring_parser.parse(docstring),
                 )
 
     for statement in class_def.body:
@@ -84,14 +97,17 @@ def parse_function_def(function_def: ast.FunctionDef, filepath: str) -> FuncDoc:
         function_def.lineno,
         parse_function_annotations(function_def),
         None,
+        None,
     )
 
     if isinstance(function_def.body[0], ast.Expr):
         if isinstance(function_def.body[0].value, ast.Constant):
             if function_def.body[0].value.s is not None:
                 body_offset: int = function_def.col_offset + 4
+                docstring = function_def.body[0].value.s.replace('\n' + ' ' * body_offset, '\n').strip()
                 func_doc = func_doc._replace(
-                    doc=function_def.body[0].value.s.replace('\n' + ' ' * body_offset, '\n').strip()
+                    doc=docstring,
+                    docstring=docstring_parser.parse(docstring),
                 )
 
     return func_doc

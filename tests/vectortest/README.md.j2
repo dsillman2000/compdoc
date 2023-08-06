@@ -1,0 +1,41 @@
+# VectorTest
+
+{% set vec = compdoc.module('vec') -%}
+{% set df = compdoc.formatter('david') -%}
+
+---
+
+Test module description!
+
+# Classes
+
+{{ df.format_class(vec.Vec2) }}
+
+Comes with a helpful function for vector magnitude:
+
+{{ df.format_function(vec.Vec2.norm) }}
+
+{{ df.format_class(vec.Vec3) }}
+
+{{ df.format_class(vec.VecN) }}
+
+Comes with classmethod constructors for using iterables of floats to pack a VecN:
+
+{{ df.format_function(vec.VecN.from_list) }}
+
+<br />
+
+{{ df.format_function(vec.VecN.from_components) }}
+
+# Standalone functions
+
+We supply just one function which flattens a list of arbitrary N-dimensional vectors into a single,
+concatenated, N-dimensional vector.
+
+{{ df.format_function(vec.flatten_vecs) }}
+
+# Acknowledgements
+
+Author:
+
+- Firstname Lastname

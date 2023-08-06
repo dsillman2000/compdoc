@@ -1,5 +1,7 @@
 from typing import Literal, NamedTuple, Optional, Union
 
+from docstring_parser import Docstring
+
 
 class FuncAnnotations(NamedTuple):
     """Struct for storing string representations of the components of a function's signature.
@@ -16,6 +18,7 @@ class FuncDoc(NamedTuple):
     line_no: int
     annotations: FuncAnnotations
     doc: Optional[str]
+    docstring: Optional[Docstring]
 
 class ClassDoc(NamedTuple):
     """Struct for storing documentation details of the functions which compose a class, including a docstring for the 
@@ -25,6 +28,7 @@ class ClassDoc(NamedTuple):
     filepath: str
     line_no: int
     doc: Optional[str]
+    docstring: Optional[Docstring]
     bases: list[str]
     elements: list[FuncDoc]
     def get_func(self, name: str) -> Optional[FuncDoc]:
