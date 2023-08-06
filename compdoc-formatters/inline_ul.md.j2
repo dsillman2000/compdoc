@@ -1,0 +1,27 @@
+{%- macro format_class(cls, link=true) -%}
+{%- set classname %}{% if link %}<b><code>[{{ cls.doc.class_name }}]({{ cls.doc.filepath }}#L{{ cls.doc.line_no }})</b></code>{% else -%}
+<span><b><code>{{ cls.doc.class_name }}</code></b>{% endif %}{% endset -%}
+<ul><li>{{ classname }}{% if cls.doc.docstring %}: {{ cls.doc.docstring.short_description + (cls.doc.docstring.long_description if cls.doc.docstring.long_description else '') }}{% endif %}</li>
+{%- if cls.doc.bases -%}<ul><li><i>Bases</i>: {{ cls.doc.bases | join(', ') }}</li></ul>{% endif %}</ul></span>
+{%- endmacro -%}
+
+{%- macro format_function(func, link=true) -%}
+{%- set args -%}
+{%- if func.doc.annotations.first_arg -%}{{ func.doc.annotations.first_arg }}{% if func.doc.annotations.args %}, {% endif %}{% endif -%}
+{%- for arg, type in func.doc.annotations.args %}{{ arg }}: {{ type }}{% if not loop.last %}, {% endif %}{% endfor -%}
+{%- endset -%}
+{%- set func_name = func.doc.func_name if not link else ('[' ~ func.doc.func_name ~ '](' ~ func.doc.filepath ~ '#L' ~ func.doc.line_no ~ ')') -%}
+<ul><li><code>{{ func_name }} : ({{ args }}) -> {{ func.doc.annotations.returns }}</code></li><ul><li>{{ func.doc.docstring.short_description + (func.doc.docstring.long_description if func.doc.docstring.long_description else '') }}</li>
+{%- if func.doc.docstring.params -%}
+<span><li><b>Args</b>:</li><ul>
+{%- for param in func.doc.docstring.params -%}
+<li><code>{{ param.arg_name }} ({{ param.type_name }})</code>: {{ param.description }}</li>
+{%- endfor -%}</ul>
+{%- endif -%}
+{%- if func.doc.docstring.yields -%}
+<li><b>Yields</b>:</li><ul><li><code>{{ func.doc.docstring.yields.type_name }}</code>: {{ func.doc.docstring.yields.description }}</li></ul>
+{%- endif -%}
+{%- if func.doc.docstring.returns -%}
+<li><b>Returns</b>:</li><ul><li><code>{{ func.doc.docstring.returns.type_name }}</code>: {{ func.doc.docstring.returns.description }}</li></ul>
+{%- endif -%}</ul></ul></span>
+{%- endmacro -%}

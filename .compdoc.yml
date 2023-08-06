@@ -10,4 +10,5 @@ modules:
 
 formatters:
   ul: compdoc-formatters/ul.md.j2
+  inline_ul: compdoc-formatters/inline_ul.md.j2
   href: compdoc-formatters/href.md.j2

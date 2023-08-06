@@ -136,11 +136,11 @@ def parse_function_annotations(function_def: ast.FunctionDef) -> FuncAnnotations
     arg_types: list[str] = []
     if len(function_def.args.args) > 0:
 
-        """Parse leading argument, if it is _self_ or _cls_"""
-        match function_def.args.args[0].arg:
-            case 'self':
+        """Parse leading argument, if it is _self_ or _cls_ and has no annotations"""
+        match (function_def.args.args[0].arg, function_def.args.args[0].annotation):
+            case ('self', None):
                 first_arg = 'self'
-            case 'cls':
+            case ('cls', None):
                 first_arg = 'cls'
         
         """Parse named arguments"""
