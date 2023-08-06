@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["David Sillman <dsillman2000@gmail.com>"]
 include = ["compdoc_cli.py"]
-packages = [{ include = "compdoc" }]
+packages = [{ include = "compdoc" }, { include = "compdoc_cli" }]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -18,7 +18,7 @@ pyyaml = "^6.0.1"
 pytest = "^7.4.0"
 
 [tool.poetry.scripts]
-compdoc = "compdoc_cli.compdoc_cli:cli"
+compdoc = "compdoc_cli:cli"
 
 [build-system]
 requires = ["poetry-core"]
