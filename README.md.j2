@@ -47,10 +47,13 @@ compdoc init path/to/project_folder
 This will index your project, and create a configuration YAML called `.compdoc.yml` in the project folder. The 
 configuration file will have a `modules` section, with indexed Python files, and a `formatters` section listing the 
 default formatters available for templating in Jinja. The source code for the formatters will be available in a 
-subfolder of your project folder, called `compdoc-formatters`, where you can edit or add new ones to your project.
+subfolder of your project folder, called `compdoc-formatters`, where you can add new ones to your project.
 
 > Note: To reference custom formatters from the Jinja environment, you must add an entry in the `formatters` section of 
 > your configuration.
+
+> Note: Any time you make meaningful changes to your library, it will need to be re-indexed with `compdoc init`. It's 
+> recommended that you use precommit to re-index and re-compile your docs on every commit.
 
 CompDoc knows how to index three different types of Python library constructs:
 

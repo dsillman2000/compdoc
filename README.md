@@ -47,10 +47,13 @@ compdoc init path/to/project_folder
 This will index your project, and create a configuration YAML called `.compdoc.yml` in the project folder. The 
 configuration file will have a `modules` section, with indexed Python files, and a `formatters` section listing the 
 default formatters available for templating in Jinja. The source code for the formatters will be available in a 
-subfolder of your project folder, called `compdoc-formatters`, where you can edit or add new ones to your project.
+subfolder of your project folder, called `compdoc-formatters`, where you can add new ones to your project.
 
 > Note: To reference custom formatters from the Jinja environment, you must add an entry in the `formatters` section of 
 > your configuration.
+
+> Note: Any time you make meaningful changes to your library, it will need to be re-indexed with `compdoc init`. It's 
+> recommended that you use precommit to re-index and re-compile your docs on every commit.
 
 CompDoc knows how to index three different types of Python library constructs:
 
@@ -62,7 +65,7 @@ When parsing the project, CompDoc uses Python's native `ast` library to parse me
 constructs you've implemented.
 
 
-- [**`ModuleDoc`**](compdoc/model.py#L70): Struct for storing documentation details of the composite functions and classes of a Python module.
+- [**`ModuleDoc`**](compdoc/model.py#L143): Struct for storing documentation details of the composite functions and classes of a Python module.
   - _Base(s)_: NamedTuple
   - **Attributes**:
     - `module_name (str)`: Name of the module, as in `__module__`.
@@ -70,7 +73,7 @@ constructs you've implemented.
     - `docs (list[ClassDoc | FuncDoc])`: Implemented classes and functions in the module.
 
 
-- [**`ClassDoc`**](compdoc/model.py#L37): Struct for storing documentation details of the functions which compose a class, including a docstring for the class itself.
+- [**`ClassDoc`**](compdoc/model.py#L101): Struct for storing documentation details of the functions which compose a class, including a docstring for the class itself.
   - _Base(s)_: NamedTuple
   - **Attributes**:
     - `class_name (str)`: Name of the class, as in `__class__`.
@@ -82,7 +85,7 @@ constructs you've implemented.
     - `elements (list[FuncDoc])`: List of implemented methods of this class.
 
 
-- [**`FuncDoc`**](compdoc/model.py#L19): Struct for storing documentation details about functions, including their signature & docstring.
+- [**`FuncDoc`**](compdoc/model.py#L63): Struct for storing documentation details about functions, including their signature & docstring.
   - _Base(s)_: NamedTuple
   - **Attributes**:
     - `func_name (str)`: Name of the function.
@@ -179,3 +182,9 @@ Which compiles to look like the following
 >     <b>mymodule.py, line 15</b>
 >     <ul><li>The short description from our docstring for the function.</li></ul>
 > </span>
+
+## Acknowledgements
+
+Author:
+
+- David Sillman <dsillman2000@gmail.com>

@@ -16,6 +16,8 @@ def cli():
     init_parser = cmd_parser.add_parser('init', help='Initialize CompDoc on a Python project. Should be called from the'
                                         ' root folder of the project.')
     init_parser.add_argument('init_path', type=str, help='Location to initialize CompDoc', default=os.getcwd())
+    init_parser.add_argument('-y', action='store_true', help='Overwrite the existing CompDoc config without confirming',
+                             dest='skip_confirm')
     init_parser.add_argument('-f --formatters', type=str, help='Pattern to select default formatters by name', 
                              default='*', dest='formatters')
 
@@ -27,14 +29,20 @@ def cli():
                                 'same directory as the compile path.', default=None)
     compile_parser.add_argument('--out-path', type=str, help='Path to put compiled markdown file.', default=None)
 
+    validate_parser = cmd_parser.add_parser('validate', help='Compare the docstrings in your code against its '
+                                            'annotations, and warn about mismatches.')
+    validate_parser.add_argument('validate_path', type=str, help='Path to the root of the project to parse and validate',
+                                 default=os.getcwd())
+
     arguments = arg_parser.parse_args()
 
     if hasattr(arguments, 'init_path') and arguments.init_path:
 
         if os.path.exists(os.path.join(arguments.init_path, '.compdoc.yml')):
-            confirm = input('Overwrite existing .compdoc.yml? (y/n) ')
-            if confirm.strip().lower() != 'y':
-                exit(0)
+            if not arguments.skip_confirm:
+                confirm = input('Overwrite existing .compdoc.yml? (y/n) ')
+                if confirm.strip().lower() != 'y':
+                    exit(0)
 
         with open(os.path.join(arguments.init_path, '.compdoc.yml'), 'w') as f:
             f.write('modules:')
@@ -50,7 +58,7 @@ def cli():
                 f.write(f'\n  {formatter}: {path.removeprefix(arguments.init_path + "/")}')
             print('CompDoc initialized in ' + os.path.join(arguments.init_path, '.compdoc.yml'))
 
-    elif arguments.compile_path:
+    elif hasattr(arguments, 'compile_path'):
         
         project_folder = os.path.dirname(arguments.compile_path)
 
@@ -84,3 +92,18 @@ def cli():
         except Exception as e:
             raise(e)
         
+    elif arguments.validate_path:
+
+        project_folder = arguments.validate_path
+
+        if not os.path.exists(project_folder):
+            print("ERROR: Couldn't find project folder: %s" % project_folder)
+            exit(1)
+        
+        for mod, path in compdoc.parser.index_modules(arguments.validate_path).items():
+
+            print('Validating %s \t(%s)' % (mod, path))
+            validation_results = compdoc.parser.parse_module(path).validate()
+            validation_failures = [ dv for dv in validation_results if dv.status == 'failure' ]
+            for fail in validation_failures:
+                print('[x]\t%s\tFAIL:\t%s' % (fail.name, fail.message), end='\n\n')

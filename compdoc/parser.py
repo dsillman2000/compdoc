@@ -127,7 +127,9 @@ def parse_function_annotations(function_def: ast.FunctionDef) -> FuncAnnotations
             return annotation.value
         if isinstance(annotation, ast.Tuple):
             return ', '.join(map(_parse_arg_annotation, annotation.elts))
-        raise ParseArgAnnotationException('Failed to parse arg annotation: %s' % annotation)
+        if isinstance(annotation, ast.Attribute) and isinstance(annotation.value, ast.Name):
+            return annotation.value.id + '.' + annotation.attr
+        raise ParseArgAnnotationException('Failed to parse arg annotation: %s %s %s' % (annotation, function_def.lineno, function_def.name))
 
     return_type = _parse_arg_annotation(function_def.returns)
 

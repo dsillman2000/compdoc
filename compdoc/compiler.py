@@ -1,5 +1,5 @@
 import os
-from typing import Optional, TypedDict
+from typing import Optional
 
 from jinja2 import BaseLoader, Environment, Template
 from jinja2.environment import TemplateModule
@@ -16,7 +16,7 @@ from compdoc.model import ClassDoc, DocType, FuncDoc, ModuleDoc
 from compdoc.parser import parse_module
 
 
-class CompDocBase:
+class CompDocBase(object):
     doc: DocType
 
 class CompDocFunction(CompDocBase):
@@ -50,21 +50,21 @@ class CompDocClass(CompDocBase):
         for d in self.doc.elements:
             self.attrs[d.func_name] = CompDocFunction(d)
 
-    def __getattribute__(self, name: str) -> CompDocFunction:
+    def __getattr__(self, name: str) -> CompDocFunction:
         """Allows Jinja context to use attribute-getting "a.b" operations to reference module contents.
 
         Args:
             name (str): Name of the function to attempt to get
 
+        Returns:
+            CompDocFunction: The class function, as a CompDocFunction, if it exists
+
         Raises:
             CompileClassFuncNotFoundException: If the name requested does not map to an explicitly defined function in 
             the class.
-
-        Returns:
-            CompDocFunction: The class function, as a CompDocFunction, if it exists
         """        
         try:
-            return super().__getattribute__(name)
+            return super(object).__getattr__(name)
         except AttributeError:
             if name in self.attrs:
                 return self.attrs[name]
